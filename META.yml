@@ -1,6 +1,7 @@
 abstract: PITA Testing Schemes
 author: 'Adam Kennedy <cpan@ali.as>, L<http://ali.as/>'
 build_requires:
+  Cwd: 0
   File::Remove: 0.22
   Test::More: 0.47
 distribution_type: module
@@ -17,10 +18,13 @@ requires:
   Config::Tiny: 2.04
   File::Spec: 0.80
   File::Temp: 0
+  HTTP::Request::Common: 0
   IPC::Cmd: 0.24
   IPC::Open3: 0
   IPC::Run: 0.78
-  PITA::Report: 0.04
+  LWP: 5.54
+  LWP::UserAgent: 0
+  PITA::Report: 0.06
   Params::Util: 0.07
   perl: 5.005
-version: 0.01
+version: 0.02

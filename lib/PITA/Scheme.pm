@@ -8,6 +8,21 @@ PITA::Scheme - PITA Testing Schemes
 
 =head1 SYNOPSIS
 
+  # Have the scheme load up from the provided config
+  my $scheme = PITA::Scheme->new(
+	injector => $injector,
+	workarea => $workarea,
+	);
+  
+  # Prepare to run the tests
+  $scheme->prepare_all;
+  
+  # Run the tests
+  $scheme->execute_all;
+  
+  # Send the results back to the server
+  $scheme->put_report;
+
 =head1 DESCRIPTION
 
 While most of the PITA system exists outside the guest testing images and
@@ -43,23 +58,29 @@ And it should do the rest. Or die... but we'll cover that later.
 
 =head1 METHODS
 
+Please excuse the lack of details for now...
+
+TO BE COMPLETED
+
 =cut
 
 use 5.005;
 use strict;
-use Carp         ();
-use IPC::Cmd     ();
-use File::Spec   ();
-use File::Temp   ();
-use Params::Util '_HASH',
-                 '_CLASS',
-                 '_INSTANCE';
-use Config::Tiny ();
-use PITA::Report ();
+use Carp                  ();
+use IPC::Cmd              ();
+use File::Spec            ();
+use File::Temp            ();
+use Params::Util          '_HASH',
+                          '_CLASS',
+                          '_INSTANCE';
+use Config::Tiny          ();
+use LWP::UserAgent        ();
+use HTTP::Request::Common 'PUT';
+use PITA::Report          ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.01';
+	$VERSION = '0.02';
 }
 
 
@@ -195,6 +216,14 @@ sub request {
 	$_[0]->{request};
 }
 
+sub install {
+	$_[0]->{install};	
+}
+
+sub report {
+	$_[0]->{report};
+}
+
 
 
 
@@ -215,25 +244,113 @@ sub load_config {
 	1;
 }
 
+# Do the various preparations
+sub prepare_all {
+	my $self = shift;
+	return 1 if $self->install;
+
+	# Prepare the package
+	$self->prepare_package;
+
+	# Prepare the environment
+	$self->prepare_environment;
+
+	# Prepare the report
+	$self->prepare_report;
+
+	1;
+}
+
 # Nothing, yet
 sub prepare_package {
 	my $self = shift;
 	1;
 }
 
+sub prepare_report {
+	my $self = shift;
+	return 1 if $self->install;
+
+	# Create the install object
+	$self->{install} = PITA::Report::Install->new(
+		request  => $self->request,
+		platform => $self->platform,
+		);
+
+	# Create the main report object
+	$self->{report} ||= PITA::Report->new();
+	$self->report->add_install( $self->install );
+
+	1;
+}
+
 sub execute_command {
 	my ($self, $cmd) = @_;
+
+	# Execute the command
 	my ($success, $error_code, undef, $stdout_buf, $stderr_buf )
 		= IPC::Cmd::run( command => $cmd, verbose => 0 );
+
+	# Turn the results into a Command object
 	my $command = PITA::Report::Command->new(
-		system => $cmd,
+		cmd    => $cmd,
 		stdout => $stdout_buf,
 		stderr => $stderr_buf,
 		);
 	unless ( _INSTANCE($command, 'PITA::Report::Command') ) {
 		Carp::croak("Error creating ::Command");
 	}
+
+	# If we have a PITA::Report::Install object available,
+	# automatically add to it.
+	if ( $self->install ) {
+		$self->install->add_command( $command );
+	}
+
 	$command;
+}
+
+# Save the report to somewhere
+sub write_report {
+	my $self = shift;
+	unless ( $self->report ) {
+		Carp::croak("No Report created to write");
+	}
+	$self->report->write( shift );
+}
+
+# Upload the report to the results server
+sub put_report {
+	my $self = shift;
+	unless ( $self->report ) {
+		Carp::croak("No Report created to PUT");
+	}
+
+	# Where should we send to
+	my $uri  = @_ ? shift : $self->instance->{result_uri};
+	unless ( _INSTANCE($uri, 'URI') ) {
+		Carp::croak("Did not provide a URI parameter");
+	}
+
+	# Serialise the data for sending
+	my $xml = '';
+	$self->write_report( \$xml );
+	unless ( length($xml) ) {
+		Carp::croak("Failed to serialize report file");
+	}
+
+	# Send the file
+	my $agent    = LWP::UserAgent->new;
+	my $response = $agent->request(PUT $uri,
+		content_type   => 'application/xml',
+		content_length => length($xml),
+		content        => $xml,
+		);
+	unless ( $response and $response->success ) {
+		Carp::croak("Failed to send result report to server");
+	}
+
+	1;
 }
 
 1;

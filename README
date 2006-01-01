@@ -2,6 +2,21 @@ NAME
     PITA::Scheme - PITA Testing Schemes
 
 SYNOPSIS
+      # Have the scheme load up from the provided config
+      my $scheme = PITA::Scheme->new(
+            injector => $injector,
+            workarea => $workarea,
+            );
+  
+      # Prepare to run the tests
+      $scheme->prepare_all;
+  
+      # Run the tests
+      $scheme->execute_all;
+  
+      # Send the results back to the server
+      $scheme->put_report;
+
 DESCRIPTION
     While most of the PITA system exists outside the guest testing images
     and tries to have as little interaction with them as possible, there is
@@ -34,6 +49,10 @@ Setting up a Testing Image
     And it should do the rest. Or die... but we'll cover that later.
 
 METHODS
+    Please excuse the lack of details for now...
+
+    TO BE COMPLETED
+
 SUPPORT
     Bugs should be reported via the CPAN bug tracker at
 

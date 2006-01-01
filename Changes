@@ -1,5 +1,10 @@
 Revision history for Perl extension PITA::Scheme
 
+0.02  Mon  2 Jan 2005
+	- Completed what should be the first usable version
+	- Completed Scheme modules for perl5, perl5.make, perl5.build
+	- Should be able to put the results to the server if told where.
+
 0.01  Sat 31 Dec 2005
 	- Initial implementation
 	- Completes sequence up to prepare_package

@@ -21,7 +21,11 @@ MANIFEST			This list of files
 META.yml
 README
 t/01_compile.t
-t/02_empiric.t
-t/02_empiric/injector/Class-Inspector-1.13.tar.gz
-t/02_empiric/injector/scheme.conf
+t/02_prepare.t
+t/02_prepare/injector/PITA-Test-Dummy-Perl5-Make-1.01.tar.gz
+t/02_prepare/injector/scheme.conf
+t/03_execute.t
+t/04_perl5build.t
+t/04_perl5build/injector/PITA-Test-Dummy-Perl5-Build-1.00.tar.gz
+t/04_perl5build/injector/scheme.conf
 t/99_pod.t
