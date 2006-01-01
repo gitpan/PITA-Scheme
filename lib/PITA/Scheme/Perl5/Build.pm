@@ -9,7 +9,7 @@ use Carp       ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.02';
+	$VERSION = '0.03';
 }
 
 
@@ -52,11 +52,6 @@ sub prepare_package {
 sub execute_all {
 	my $self = shift;
 
-	# Generate the path for calling Build once.
-	$self->{Build} = File::Spec->catfile(
-		File::Spec->curdir, 'Build',
-		);
-
 	# Run the Makefile.PL
 	$self->execute_buildpl or return '';
 
@@ -97,7 +92,7 @@ sub execute_build {
 	}
 
 	# Run the make
-	my $command = $self->execute_command("$self->{Build}");
+	my $command = $self->execute_command("perl Build");
 
 	# Did it create a blib directory?
 	if ( -d $self->workarea_file('blib') ) {
@@ -121,7 +116,7 @@ sub execute_buildtest {
 	}
 
 	# Run the make test
-	my $command = $self->execute_command("$self->{Build} test");
+	my $command = $self->execute_command("perl Build test");
 
 	# Did it... erm...
 	if ( 1 ) {

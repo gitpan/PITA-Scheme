@@ -1,5 +1,10 @@
 Revision history for Perl extension PITA::Scheme
 
+0.03  Mon  2 Jan 2005
+	- Module::Build manual suggests more compatible in more places to
+	  use C<perl Build>/etc than C<./Build>
+	- Incrementing PITA::Report dep
+
 0.02  Mon  2 Jan 2005
 	- Completed what should be the first usable version
 	- Completed Scheme modules for perl5, perl5.make, perl5.build
