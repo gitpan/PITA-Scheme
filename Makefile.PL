@@ -14,6 +14,7 @@ requires       'Archive::Extract'      => '0.07';
 requires       'PITA::Report'          => '0.07';
 requires       'LWP::UserAgent'        => 0;
 requires       'HTTP::Request::Common' => 0;
+requires       'URI'                   => 0;
 requires       'LWP'                   => '5.54';
 build_requires 'Cwd'                   => 0;
 build_requires 'Test::More'            => '0.47';

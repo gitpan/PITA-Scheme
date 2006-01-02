@@ -67,6 +67,7 @@ TO BE COMPLETED
 use 5.005;
 use strict;
 use Carp                  ();
+use URI                   ();
 use IPC::Cmd              ();
 use File::Spec            ();
 use File::Temp            ();
@@ -80,7 +81,7 @@ use PITA::Report          ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.05'
+	$VERSION = '0.06';
 }
 
 
@@ -183,13 +184,25 @@ sub new {
 		Carp::croak("Error loading scheme driver $driver: $@");
 	}
 
-	# FINALLY hand off ALL those params to the scheme class constructor
-	return $driver->new( %p,
+	# Hand off ALL those params to the scheme class constructor
+	my $self = $driver->new( %p,
 		scheme_conf => $scheme_conf,
 		config      => $config,
 		instance    => $instance,
 		request     => $request,
 		);
+
+	# Make sure we know where to get CPAN files from
+	unless ( _INSTANCE($self->support_server, 'URI') ) {
+		Carp::croak('scheme.conf did not provide a support_server');
+	}
+
+	# Make sure we know where to send the results to
+	unless ( _INSTANCE($self->put_uri, 'URI') ) {
+		Carp::croak('Could not create a put_uri for the results');
+	}
+
+	$self;
 }
 
 sub injector {
@@ -204,6 +217,10 @@ sub scheme_conf {
 	$_[0]->{scheme_conf};
 }
 
+sub support_server {
+	URI->new($_[0]->instance->{support_server});
+}
+
 sub config {
 	$_[0]->{config};
 }
@@ -214,6 +231,19 @@ sub instance {
 
 sub request {
 	$_[0]->{request};
+}
+
+sub request_id {
+	my $self = shift;
+	if ( $self->request and $self->request->can('id') ) {
+		# New style request objects
+		return $self->request->id;
+	} elsif ( $self->instance ) {
+		# Manually passed job_id
+		return $self->instance->{job_id};
+	}
+
+	undef;
 }
 
 sub install {
@@ -326,12 +356,6 @@ sub put_report {
 		Carp::croak("No Report created to PUT");
 	}
 
-	# Where should we send to
-	my $uri  = @_ ? shift : $self->instance->{result_uri};
-	unless ( _INSTANCE($uri, 'URI') ) {
-		Carp::croak("Did not provide a URI parameter");
-	}
-
 	# Serialise the data for sending
 	my $xml = '';
 	$self->write_report( \$xml );
@@ -341,7 +365,7 @@ sub put_report {
 
 	# Send the file
 	my $agent    = LWP::UserAgent->new;
-	my $response = $agent->request(PUT $uri,
+	my $response = $agent->request(PUT $self->put_uri,
 		content_type   => 'application/xml',
 		content_length => length($xml),
 		content        => $xml,
@@ -351,6 +375,16 @@ sub put_report {
 	}
 
 	1;
+}
+
+# The location to put to
+sub put_uri {
+	my $self = shift;
+	my $uri  = $self->support_server;
+	my $job  = $self->request_id or return undef;
+	my $path = File::Spec->catfile( $uri->path || '/', $job );
+	$uri->path( $path );
+	$uri;
 }
 
 1;

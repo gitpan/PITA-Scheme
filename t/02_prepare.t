@@ -22,7 +22,7 @@ BEGIN {
 use Cwd;
 use File::Remove;
 use PITA::Scheme;
-use Test::More tests => 29;
+use Test::More tests => 32;
 
 # Locate the injector directory
 my $injector = catdir( 't', '02_prepare', 'injector' );
@@ -61,11 +61,14 @@ ok( $scheme->scheme_conf, '->scheme_conf returns true'           );
 ok( -f $scheme->scheme_conf, '->scheme_conf file exists'         );
 isa_ok( $scheme->config, 'Config::Tiny'                          );
 isa_ok( $scheme->request, 'PITA::Report::Request'                );
+is( $scheme->request_id, 1234, 'Got expected ->request_id value' );
 ok( $scheme->archive, '->archive returns true'                   );
 ok( -f $scheme->archive, '->archive file exists'                 );
 is( $scheme->extract_path, undef, 'No ->extract_path value yet'  );
 is( scalar($scheme->extract_files), undef, 'No ->extract_files ' );
 is_deeply( [ $scheme->extract_files ], [], 'No ->extract_files ' );
+isa_ok( $scheme->put_uri, 'URI' );
+is( $scheme->put_uri, 'http://10.0.2.2/1234', '->put_uri correct' );
 
 # Prepare the package
 ok( $scheme->prepare_package, '->prepare_package runs ok' );

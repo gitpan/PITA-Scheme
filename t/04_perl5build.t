@@ -22,7 +22,7 @@ BEGIN {
 use Cwd;
 use File::Remove;
 use PITA::Scheme;
-use Test::More tests => 25;
+use Test::More tests => 29;
 
 # Locate the injector directory
 my $injector = catdir( 't', '04_perl5build', 'injector' );
@@ -62,10 +62,13 @@ like( $scheme->workarea_file('Build.PL'), qr/\bBuild\.PL$/,
 ok( -f $scheme->workarea_file('Build.PL'),
 	'Build.PL exists in the extract package' );
 ok( -f 'Build.PL', 'Changed to package directory, found Build.PL' );
+isa_ok( $scheme->request, 'PITA::Report::Request'   );
+is( $scheme->request_id, 1234, 'Got expected ->request_id value' );
 isa_ok( $scheme->platform, 'PITA::Report::Platform' );
 isa_ok( $scheme->install, 'PITA::Report::Install'   );
 isa_ok( $scheme->report, 'PITA::Report'             );
-
+isa_ok( $scheme->put_uri, 'URI' );
+is( $scheme->put_uri, 'http://10.0.2.2/1234', '->put_uri correct' );
 
 
 
