@@ -26,6 +26,6 @@ t/02_prepare/injector/PITA-Test-Dummy-Perl5-Make-1.01.tar.gz
 t/02_prepare/injector/scheme.conf
 t/03_execute.t
 t/04_perl5build.t
-t/04_perl5build/injector/PITA-Test-Dummy-Perl5-Build-1.00.tar.gz
+t/04_perl5build/injector/PITA-Test-Dummy-Perl5-Build-1.01.tar.gz
 t/04_perl5build/injector/scheme.conf
 t/99_pod.t

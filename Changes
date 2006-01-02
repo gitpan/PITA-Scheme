@@ -1,5 +1,9 @@
 Revision history for Perl extension PITA::Scheme
 
+0.04  Tue  3 Jan 2005
+	- Accidentally left a Build file in Brian the test dummy.
+	  This was causing test problems
+
 0.03  Mon  2 Jan 2005
 	- Module::Build manual suggests more compatible in more places to
 	  use C<perl Build>/etc than C<./Build>
