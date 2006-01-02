@@ -18,6 +18,7 @@ requires       'LWP'                   => '5.54';
 build_requires 'Cwd'                   => 0;
 build_requires 'Test::More'            => '0.47';
 build_requires 'File::Remove'          => '0.22';
+build_requires 'Module::Build'         => 0;
 
 auto_install;
 WriteAll;

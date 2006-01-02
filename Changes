@@ -1,5 +1,8 @@
 Revision history for Perl extension PITA::Scheme
 
+0.05  Tue  3 Jan 2005
+	- One of the tests need Mobule::Build to be available
+
 0.04  Tue  3 Jan 2005
 	- Accidentally left a Build file in Brian the test dummy.
 	  This was causing test problems
