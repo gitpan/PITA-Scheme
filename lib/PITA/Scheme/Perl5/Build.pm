@@ -9,7 +9,7 @@ use Carp       ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.06';
+	$VERSION = '0.08';
 }
 
 
@@ -71,7 +71,7 @@ sub execute_buildpl {
 	}
 
 	# Run the Makefile.PL
-	my $command = $self->execute_command('perl Build.PL');
+	my $command = $self->execute_command('perl', 'Build.PL');
 
 	# Did it create a make file
 	if ( -f $self->workarea_file('Build') ) {
@@ -92,7 +92,7 @@ sub execute_build {
 	}
 
 	# Run the make
-	my $command = $self->execute_command("perl Build");
+	my $command = $self->execute_command('perl', 'Build');
 
 	# Did it create a blib directory?
 	if ( -d $self->workarea_file('blib') ) {
@@ -116,7 +116,7 @@ sub execute_buildtest {
 	}
 
 	# Run the make test
-	my $command = $self->execute_command("perl Build test");
+	my $command = $self->execute_command('perl', 'Build', 'test');
 
 	# Did it... erm...
 	if ( 1 ) {

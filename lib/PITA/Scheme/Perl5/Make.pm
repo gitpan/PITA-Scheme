@@ -8,7 +8,7 @@ use Carp ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.06';
+	$VERSION = '0.08';
 }
 
 
@@ -70,7 +70,7 @@ sub execute_makefilepl {
 	}
 
 	# Run the Makefile.PL
-	my $command = $self->execute_command('perl Makefile.PL');
+	my $command = $self->execute_command('perl', 'Makefile.PL');
 
 	# Did it create a make file
 	if ( -f $self->workarea_file('Makefile') ) {
@@ -115,7 +115,7 @@ sub execute_maketest {
 	}
 
 	# Run the make test
-	my $command = $self->execute_command('make test');
+	my $command = $self->execute_command('make', 'test');
 
 	# Did it... erm...
 	if ( 1 ) {

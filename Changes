@@ -1,5 +1,12 @@
 Revision history for Perl extension PITA::Scheme
 
+0.08  Sat  7 Jan 2006
+	- Converted command execution code from flakey IPC::Cmd to the
+	  much saner IPC::Run3.
+
+0.07  ###############
+	- Fixed misspelled method name in Scheme.pm
+
 0.06  Tue  3 Jan 2006
 	- Added the concept of request identifiers, because embedding
 	  that information inside the ResultServer isn't going to work

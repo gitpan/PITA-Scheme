@@ -6,8 +6,8 @@ use Module::Install::Base;
 
 use vars qw($VERSION @ISA);
 BEGIN {
-	$VERSION = '0.06';
-	@ISA     = 'Module::Install::Base';
+    $VERSION = '0.06';
+    @ISA     = 'Module::Install::Base';
 }
 
 my @scalar_keys = qw{
@@ -64,6 +64,14 @@ sub sign {
 
 sub all_from {
     my ( $self, $file ) = @_;
+
+    unless ( defined($file) ) {
+        my $name = $self->name
+            or die "all_from called with no args without setting name() first";
+        $file = join('/', 'lib', split(/-/, $name)) . '.pm';
+        $file =~ s{.*/}{} unless -e $file;
+        die "all_from: cannot find $file from $name" unless -e $file;
+    }
 
     $self->version_from($file)      unless $self->version;
     $self->perl_version_from($file) unless $self->perl_version;

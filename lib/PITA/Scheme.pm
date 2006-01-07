@@ -68,10 +68,11 @@ use 5.005;
 use strict;
 use Carp                  ();
 use URI                   ();
-use IPC::Cmd              ();
+use IPC::Run3             ();
 use File::Spec            ();
 use File::Temp            ();
 use Params::Util          '_HASH',
+                          '_ARRAY',
                           '_CLASS',
                           '_INSTANCE';
 use Config::Tiny          ();
@@ -81,7 +82,7 @@ use PITA::Report          ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.06';
+	$VERSION = '0.08';
 }
 
 
@@ -315,17 +316,21 @@ sub prepare_report {
 }
 
 sub execute_command {
-	my ($self, $cmd) = @_;
+	my $self = shift;
+	my $cmd  = _ARRAY( [ @_ ] ) or Carp::croak(
+		"execute_command not passed an ARRAY ref as command"
+		);
 
 	# Execute the command
-	my ($success, $error_code, undef, $stdout_buf, $stderr_buf )
-		= IPC::Cmd::run( command => $cmd, verbose => 0 );
+	my $stdout = '';
+	my $stderr = '';
+	my $success = IPC::Run3::run3( $cmd, \undef, \$stdout, \$stderr );
 
 	# Turn the results into a Command object
 	my $command = PITA::Report::Command->new(
-		cmd    => $cmd,
-		stdout => $stdout_buf,
-		stderr => $stderr_buf,
+		cmd    => join( ' ', @$cmd ),
+		stdout => \$stdout,
+		stderr => \$stderr,
 		);
 	unless ( _INSTANCE($command, 'PITA::Report::Command') ) {
 		Carp::croak("Error creating ::Command");
@@ -370,7 +375,7 @@ sub put_report {
 		content_length => length($xml),
 		content        => $xml,
 		);
-	unless ( $response and $response->success ) {
+	unless ( $response and $response->is_success ) {
 		Carp::croak("Failed to send result report to server");
 	}
 
