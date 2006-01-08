@@ -21,8 +21,8 @@ BEGIN {
 
 use Cwd;
 use File::Remove;
-use PITA::Scheme;
-use Test::More tests => 28;
+use PITA::Scheme::Perl5::Make;
+use Test::More tests => 26;
 
 # Locate the injector directory
 my $injector = catdir( 't', '02_prepare', 'injector' );
@@ -52,9 +52,13 @@ ok( ! -f $write_report, "Report doesn't exist" );
 #####################################################################
 # Prepare
 
-my $scheme = PITA::Scheme->new(
-	injector => $injector,
-	workarea => $workarea,
+my $scheme = PITA::Scheme::Perl5::Make->new(
+	injector    => $injector,
+	workarea    => $workarea,
+	scheme      => 'perl5.make',
+	path        => '',
+	scheme_conf => 'scheme.conf',
+	request_id  => 1234,
 	);
 isa_ok( $scheme, 'PITA::Scheme' );
 
@@ -101,10 +105,5 @@ ok( -f $scheme->workarea_file('Makefile'),
 	'Makefile actually got created' );
 ok( -d $scheme->workarea_file('blib'),
 	'blib directory actually got created' );
-
-# Write out the report
-ok( $scheme->write_report( $write_report ),
-	'->write_report returned true' );
-ok( -f $write_report, '->write_report wrote the report' );
 
 exit(0);

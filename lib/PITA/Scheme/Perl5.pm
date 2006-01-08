@@ -9,11 +9,12 @@ package PITA::Scheme::Perl5;
 
 use strict;
 use base 'PITA::Scheme::Perl';
-use File::Spec ();
+use File::Spec  ();
+use File::Which ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.08';
+	$VERSION = '0.09';
 }
 
 
@@ -26,7 +27,6 @@ BEGIN {
 sub new {
 	my $class = shift;
 	my $self  = $class->SUPER::new(@_);
-
 	$self;
 }
 
@@ -36,6 +36,10 @@ sub new {
 
 #####################################################################
 # PITA::Scheme Methods
+
+sub default_path {
+	File::Which::which('perl') || '';
+}
 
 sub prepare_package {
 	my $self = shift;

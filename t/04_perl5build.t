@@ -21,8 +21,8 @@ BEGIN {
 
 use Cwd;
 use File::Remove;
-use PITA::Scheme;
-use Test::More tests => 29;
+use PITA::Scheme::Perl5::Build;
+use Test::More tests => 27;
 
 # Locate the injector directory
 my $injector = catdir( 't', '04_perl5build', 'injector' );
@@ -46,9 +46,13 @@ ok( -d $workarea, 'Test workarea exists' );
 #####################################################################
 # Prepare
 
-my $scheme = PITA::Scheme->new(
-	injector => $injector,
-	workarea => $workarea,
+my $scheme = PITA::Scheme::Perl5::Build->new(
+	injector    => $injector,
+	workarea    => $workarea,
+	scheme      => 'perl5.build',
+	path        => '',
+	scheme_conf => 'scheme.conf',
+	request_id  => 1234,
 	);
 isa_ok( $scheme, 'PITA::Scheme' );
 
@@ -67,8 +71,7 @@ is( $scheme->request_id, 1234, 'Got expected ->request_id value' );
 isa_ok( $scheme->platform, 'PITA::Report::Platform' );
 isa_ok( $scheme->install, 'PITA::Report::Install'   );
 isa_ok( $scheme->report, 'PITA::Report'             );
-isa_ok( $scheme->put_uri, 'URI' );
-is( $scheme->put_uri, 'http://10.0.2.2/1234', '->put_uri correct' );
+
 
 
 

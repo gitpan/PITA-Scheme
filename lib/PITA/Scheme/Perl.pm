@@ -12,7 +12,7 @@ use Archive::Extract ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.08';
+	$VERSION = '0.09';
 }
 
 
@@ -25,7 +25,7 @@ BEGIN {
 # Do the extra common checks we couldn't do in the main class
 sub new {
 	my $class = shift;
-	my $self  = bless { @_ }, $class;
+	my $self  = $class->SUPER::new(@_);
 
 	# Can we locate the package?
 	my $filename = $self->request->filename;

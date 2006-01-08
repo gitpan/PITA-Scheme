@@ -19,12 +19,9 @@ requires:
   Config::Tiny: 2.04
   File::Spec: 0.80
   File::Temp: 0
-  HTTP::Request::Common: 0
+  File::Which: 0
   IPC::Run3: 0.034
-  LWP: 5.54
-  LWP::UserAgent: 0
   PITA::Report: 0.07
   Params::Util: 0.07
-  URI: 0
   perl: 5.005
-version: 0.08
+version: 0.09

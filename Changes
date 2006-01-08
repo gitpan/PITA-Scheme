@@ -1,5 +1,11 @@
 Revision history for Perl extension PITA::Scheme
 
+0.09  Mon  9 Jan 2006
+	- Ripped out all the HTTP transfer stuff, as it has been moved
+	  over to PITA-Image.
+	- Take less configuration, only the scheme-specific file.
+	- Requires more constructor arguments.
+
 0.08  Sat  7 Jan 2006
 	- Converted command execution code from flakey IPC::Cmd to the
 	  much saner IPC::Run3.

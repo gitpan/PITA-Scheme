@@ -21,8 +21,8 @@ BEGIN {
 
 use Cwd;
 use File::Remove;
-use PITA::Scheme;
-use Test::More tests => 32;
+use PITA::Scheme::Perl5::Make ();
+use Test::More tests => 29;
 
 # Locate the injector directory
 my $injector = catdir( 't', '02_prepare', 'injector' );
@@ -46,9 +46,13 @@ ok( -d $workarea, 'Test workarea exists' );
 #####################################################################
 # Main Testing
 
-my $scheme = PITA::Scheme->new(
-	injector => $injector,
-	workarea => $workarea,
+my $scheme = PITA::Scheme::Perl5::Make->new(
+	injector    => $injector,
+	workarea    => $workarea,
+	scheme      => 'perl5.make',
+	path        => '',
+	scheme_conf => 'scheme.conf',
+	request_id  => 1234,
 	);
 isa_ok( $scheme, 'PITA::Scheme'              );
 isa_ok( $scheme, 'PITA::Scheme::Perl5::Make' );
@@ -56,7 +60,6 @@ isa_ok( $scheme, 'PITA::Scheme::Perl5::Make' );
 # Check the accessors
 is( $scheme->injector, $injector, '->injector matches original'  );
 is( $scheme->workarea, $workarea, '->workarea matches original'  );
-is( ref($scheme->instance), 'HASH', '->instance returns a hash'  );
 ok( $scheme->scheme_conf, '->scheme_conf returns true'           );
 ok( -f $scheme->scheme_conf, '->scheme_conf file exists'         );
 isa_ok( $scheme->config, 'Config::Tiny'                          );
@@ -67,8 +70,6 @@ ok( -f $scheme->archive, '->archive file exists'                 );
 is( $scheme->extract_path, undef, 'No ->extract_path value yet'  );
 is( scalar($scheme->extract_files), undef, 'No ->extract_files ' );
 is_deeply( [ $scheme->extract_files ], [], 'No ->extract_files ' );
-isa_ok( $scheme->put_uri, 'URI' );
-is( $scheme->put_uri, 'http://10.0.2.2/1234', '->put_uri correct' );
 
 # Prepare the package
 ok( $scheme->prepare_package, '->prepare_package runs ok' );

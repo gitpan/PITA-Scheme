@@ -66,23 +66,16 @@ TO BE COMPLETED
 
 use 5.005;
 use strict;
-use Carp                  ();
-use URI                   ();
-use IPC::Run3             ();
-use File::Spec            ();
-use File::Temp            ();
-use Params::Util          '_HASH',
-                          '_ARRAY',
-                          '_CLASS',
-                          '_INSTANCE';
-use Config::Tiny          ();
-use LWP::UserAgent        ();
-use HTTP::Request::Common 'PUT';
-use PITA::Report          ();
+use Carp         ();
+use IPC::Run3    ();
+use File::Spec   ();
+use Params::Util ':ALL';
+use Config::Tiny ();
+use PITA::Report ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.08';
+	$VERSION = '0.09';
 }
 
 
@@ -90,121 +83,68 @@ BEGIN {
 
 
 #####################################################################
-# Constructor and Accessors
+# Constructor
 
 sub new {
-	my $class  = shift;
-	my %p      = @_; # p for params
-	unless ( $class eq __PACKAGE__ ) {
-		Carp::croak("Scheme class $_[0] does not implement a new method");
+	my $class = shift;
+	my $self  = bless { @_ }, $class;
+
+	# Apply the default path if needed
+	unless ( $self->path ) {
+		$self->{path} = $self->default_path;
 	}
 
-	# Check some params
-	unless ( $p{injector} ) {
-		Carp::croak("Scheme 'injector' was not provided");
-	}
-	### Might not be needed now we don't write back to it
-	#unless ( File::Spec->file_name_is_absolute($p{injector}) ) {
-	#	Carp::croak("Scheme 'injector' is not an absolute path");
-	#}
-	unless ( -d $p{injector} ) {
-		Carp::croak("Scheme 'injector' does not exist");
-	}
-	unless ( -r $p{injector} ) {
-		Carp::croak("Scheme 'injector' cannot be read, insufficient permissions");
+	# Cursory checking for compulsory params
+	foreach my $param ( qw{injector workarea scheme path scheme_conf} ) {
+		next if $self->$param();
+		Carp::croak("Missing compulsory param '$param'");
 	}
 
-	# Find a temporary directory to use for the testing
-	$p{workarea} ||= File::Temp::tempdir();
-	unless ( $p{workarea} ) {
-		Carp::croak("Scheme 'workarea' not provided and automatic detection failed");
+	# Check the scheme config file to be inside the injector
+	$self->{scheme_conf} = File::Spec->catfile( $self->injector, $self->scheme_conf );
+	unless ( -f $self->scheme_conf ) {
+		Carp::croak( "Failed to find test request config file "
+			. $self->scheme_conf );
 	}
-	unless ( -d $p{workarea} ) {
-		Carp::croak("Scheme 'workarea' directory does not exist");
-	}
-	unless ( -r $p{workarea} and -w _ ) {
-		Carp::croak("Scheme 'workarea' insufficient permissions");
-	}
-
-	# Find the scheme config file
-	my $scheme_conf = File::Spec->catfile(
-		$p{injector}, 'scheme.conf',
-		);
-	unless ( -f $scheme_conf ) {
-		Carp::croak("Failed to find scheme.conf in the injector");
-	}
-	unless ( -r $scheme_conf ) {
-		Carp::croak("No permissions to read scheme.conf");
+	unless ( -r $self->scheme_conf ) {
+		Carp::croak( "No permissions to read test request config file "
+			. $self->scheme_conf );
 	}
 
 	# Load the config file
-	my $config = Config::Tiny->read( $scheme_conf );
+	unless ( $self->config ) {
+		$self->{config} = Config::Tiny->read( $self->scheme_conf );
+	}
+	my $config = $self->config;
 	unless ( _INSTANCE($config, 'Config::Tiny') ) {
-		Carp::croak("Failed to load scheme.conf config file");
-	}
-
-	# Split out instance-specific options
-	my $instance = delete $config->{instance};
-	unless ( _HASH($instance) ) {
-		Carp::croak("No instance-specific options in scheme.conf");
-	}
-
-	# If provided, apply the optional lib path so some libraries
-	# can be upgraded in a pince without upgrading all the images
-	if ( $instance->{lib} ) {
-		my $libpath = File::Spec->catdir( $p{injector}, split( /\//, $instance->{lib}) );
-		unless ( -d $libpath ) {
-			Carp::croak("Injector lib directory does not exist");
-		}
-		unless ( -r $libpath ) {
-			Carp::croak("Injector lib directory has no read permissions");
-		}
-		require lib;
-		lib->import( $libpath );
+		Carp::croak("Bad config object, or failed to load '$config'");
 	}
 
 	# Build a ::Request object from the config
-	require PITA::Report;
-	my $request = PITA::Report::Request->__from_Config_Tiny($config);
-	unless ( _INSTANCE($request, 'PITA::Report::Request') ) {
-		Carp::croak("Failed to create report Request object from scheme.conf");
+	unless ( $self->request ) {
+		$self->{request} = PITA::Report::Request->__from_Config_Tiny($config);
+	}
+	unless ( _INSTANCE($self->request, 'PITA::Report::Request') ) {
+		Carp::croak("Bad report Request or failed to load one from " . $self->scheme_conf );
+	}
+	unless ( $self->request->scheme eq $self->scheme ) {
+		Carp::croak("Test scheme in image.conf does not match Request scheme");
 	}
 
-	# Resolve the specific schema class for this test run
-	my $scheme = $request->scheme;
-	my $driver = join( '::', 'PITA', 'Scheme', map { ucfirst $_ } split /\./, lc($scheme || '') );
-	unless ( $scheme and _CLASS($driver) ) {
-		Carp::croak("Request contains an invalid scheme name '$scheme'");
-	}
-
-	# Load the scheme class
-	eval "require $driver;";
-	if ( $@ =~ /^Can\'t locate PITA/ ) {
-		Carp::croak("Scheme driver $driver does not exist on this Guest");
-	} elsif ( $@ ) {
-		Carp::croak("Error loading scheme driver $driver: $@");
-	}
-
-	# Hand off ALL those params to the scheme class constructor
-	my $self = $driver->new( %p,
-		scheme_conf => $scheme_conf,
-		config      => $config,
-		instance    => $instance,
-		request     => $request,
-		);
-
-	# Make sure we know where to get CPAN files from
-	unless ( _INSTANCE($self->support_server, 'URI') ) {
-		Carp::croak('scheme.conf did not provide a support_server');
-	}
-
-	# Make sure we know where to send the results to
-	unless ( _INSTANCE($self->put_uri, 'URI') ) {
-		Carp::croak('Could not create a put_uri for the results');
+	# Check the request identifier
+	unless ( _POSINT($self->request_id) ) {
+		Carp::croak("Missing or bad request_id for this test instance");
 	}
 
 	$self;
 }
+
+
+
+
+
+#####################################################################
+# Accessors passed in
 
 sub injector {
 	$_[0]->{injector};
@@ -214,24 +154,16 @@ sub workarea {
 	$_[0]->{workarea};
 }
 
+sub scheme {
+	$_[0]->{scheme};
+}
+
+sub path {
+	$_[0]->{path};
+}
+
 sub scheme_conf {
 	$_[0]->{scheme_conf};
-}
-
-sub support_server {
-	URI->new($_[0]->instance->{support_server});
-}
-
-sub config {
-	$_[0]->{config};
-}
-
-sub instance {
-	$_[0]->{instance};
-}
-
-sub request {
-	$_[0]->{request};
 }
 
 sub request_id {
@@ -239,12 +171,27 @@ sub request_id {
 	if ( $self->request and $self->request->can('id') ) {
 		# New style request objects
 		return $self->request->id;
-	} elsif ( $self->instance ) {
-		# Manually passed job_id
-		return $self->instance->{job_id};
+	} else {
+		# Manually passed request_id
+		return $self->{request_id};
 	}
 
 	undef;
+}
+
+
+
+
+
+#####################################################################
+# Accessors generated by us
+
+sub config {
+	$_[0]->{config};
+}
+
+sub request {
+	$_[0]->{request};
 }
 
 sub install {
@@ -343,53 +290,6 @@ sub execute_command {
 	}
 
 	$command;
-}
-
-# Save the report to somewhere
-sub write_report {
-	my $self = shift;
-	unless ( $self->report ) {
-		Carp::croak("No Report created to write");
-	}
-	$self->report->write( shift );
-}
-
-# Upload the report to the results server
-sub put_report {
-	my $self = shift;
-	unless ( $self->report ) {
-		Carp::croak("No Report created to PUT");
-	}
-
-	# Serialise the data for sending
-	my $xml = '';
-	$self->write_report( \$xml );
-	unless ( length($xml) ) {
-		Carp::croak("Failed to serialize report file");
-	}
-
-	# Send the file
-	my $agent    = LWP::UserAgent->new;
-	my $response = $agent->request(PUT $self->put_uri,
-		content_type   => 'application/xml',
-		content_length => length($xml),
-		content        => $xml,
-		);
-	unless ( $response and $response->is_success ) {
-		Carp::croak("Failed to send result report to server");
-	}
-
-	1;
-}
-
-# The location to put to
-sub put_uri {
-	my $self = shift;
-	my $uri  = $self->support_server;
-	my $job  = $self->request_id or return undef;
-	my $path = File::Spec->catfile( $uri->path || '/', $job );
-	$uri->path( $path );
-	$uri;
 }
 
 1;
