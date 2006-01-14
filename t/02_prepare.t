@@ -63,7 +63,7 @@ is( $scheme->workarea, $workarea, '->workarea matches original'  );
 ok( $scheme->scheme_conf, '->scheme_conf returns true'           );
 ok( -f $scheme->scheme_conf, '->scheme_conf file exists'         );
 isa_ok( $scheme->config, 'Config::Tiny'                          );
-isa_ok( $scheme->request, 'PITA::Report::Request'                );
+isa_ok( $scheme->request, 'PITA::XML::Request'                );
 is( $scheme->request_id, 1234, 'Got expected ->request_id value' );
 ok( $scheme->archive, '->archive returns true'                   );
 ok( -f $scheme->archive, '->archive file exists'                 );
@@ -84,11 +84,11 @@ ok( -f $scheme->workarea_file('Makefile.PL'),
 # Prepare the environment
 ok( $scheme->prepare_environment, '->prepare_environment runs ok' );
 ok( -f 'Makefile.PL', 'Changed to package directory, found Makefile.PL' );
-isa_ok( $scheme->platform, 'PITA::Report::Platform' );
+isa_ok( $scheme->platform, 'PITA::XML::Platform' );
 
 # Prepare the report
 ok( $scheme->prepare_report, '->prepare_report runs ok' );
-isa_ok( $scheme->install, 'PITA::Report::Install'   );
-isa_ok( $scheme->report, 'PITA::Report'             );
+isa_ok( $scheme->install, 'PITA::XML::Install' );
+isa_ok( $scheme->report, 'PITA::XML::Report'   );
 
 exit(0);

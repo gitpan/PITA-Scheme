@@ -12,7 +12,7 @@ use Archive::Extract ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.09';
+	$VERSION = '0.10';
 }
 
 
@@ -97,11 +97,11 @@ sub prepare_environment {
 	}
 
 	# Set any environment variables from the Request
-	### Not supported by PITA::Report::Request yet
+	### Not supported by PITA::XML::Request yet
 
 	# Save the platform configuration
-	$self->{platform} = PITA::Report::Platform->current;
-	unless ( _INSTANCE($self->{platform}, 'PITA::Report::Platform') ) {
+	$self->{platform} = PITA::XML::Platform->autodetect_perl5;
+	unless ( _INSTANCE($self->{platform}, 'PITA::XML::Platform') ) {
 		Carp::croak("Failed to capture platform information");
 	}
 

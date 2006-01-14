@@ -72,9 +72,9 @@ like( $scheme->workarea_file('Makefile.PL'), qr/\bMakefile\.PL$/,
 ok( -f $scheme->workarea_file('Makefile.PL'),
 	'Makefile.PL exists in the extract package' );
 ok( -f 'Makefile.PL', 'Changed to package directory, found Makefile.PL' );
-isa_ok( $scheme->platform, 'PITA::Report::Platform' );
-isa_ok( $scheme->install, 'PITA::Report::Install'   );
-isa_ok( $scheme->report, 'PITA::Report'             );
+isa_ok( $scheme->platform, 'PITA::XML::Platform' );
+isa_ok( $scheme->install, 'PITA::XML::Install'   );
+isa_ok( $scheme->report, 'PITA::XML::Report'             );
 
 
 
@@ -90,9 +90,9 @@ ok( $scheme->execute_all, '->execute_all runs ok' );
 is( scalar($scheme->install->commands), 3,
 	'->execute_all added three commands to the report' );
 my @commands = $scheme->install->commands;
-isa_ok( $commands[0], 'PITA::Report::Command' );
-isa_ok( $commands[1], 'PITA::Report::Command' );
-isa_ok( $commands[2], 'PITA::Report::Command' );
+isa_ok( $commands[0], 'PITA::XML::Command' );
+isa_ok( $commands[1], 'PITA::XML::Command' );
+isa_ok( $commands[2], 'PITA::XML::Command' );
 is( $commands[0]->cmd, 'perl Makefile.PL',
 	'Command 1 contains the expected command' );
 is( $commands[1]->cmd, 'make',

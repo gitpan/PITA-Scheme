@@ -66,11 +66,11 @@ like( $scheme->workarea_file('Build.PL'), qr/\bBuild\.PL$/,
 ok( -f $scheme->workarea_file('Build.PL'),
 	'Build.PL exists in the extract package' );
 ok( -f 'Build.PL', 'Changed to package directory, found Build.PL' );
-isa_ok( $scheme->request, 'PITA::Report::Request'   );
+isa_ok( $scheme->request, 'PITA::XML::Request'   );
 is( $scheme->request_id, 1234, 'Got expected ->request_id value' );
-isa_ok( $scheme->platform, 'PITA::Report::Platform' );
-isa_ok( $scheme->install, 'PITA::Report::Install'   );
-isa_ok( $scheme->report, 'PITA::Report'             );
+isa_ok( $scheme->platform, 'PITA::XML::Platform' );
+isa_ok( $scheme->install, 'PITA::XML::Install'   );
+isa_ok( $scheme->report, 'PITA::XML::Report'     );
 
 
 
@@ -86,9 +86,9 @@ ok( $scheme->execute_all, '->execute_all runs ok' );
 is( scalar($scheme->install->commands), 3,
 	'->execute_all added three commands to the report' );
 my @commands = $scheme->install->commands;
-isa_ok( $commands[0], 'PITA::Report::Command' );
-isa_ok( $commands[1], 'PITA::Report::Command' );
-isa_ok( $commands[2], 'PITA::Report::Command' );
+isa_ok( $commands[0], 'PITA::XML::Command' );
+isa_ok( $commands[1], 'PITA::XML::Command' );
+isa_ok( $commands[2], 'PITA::XML::Command' );
 is( $commands[0]->cmd, 'perl Build.PL',
 	'Command 1 contains the expected command' );
 like( $commands[1]->cmd, qr/Build$/,

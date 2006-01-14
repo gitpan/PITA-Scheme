@@ -29,7 +29,7 @@ DESCRIPTION
     2. Run the sequence of commands to execute the tests and capture the
     results.
 
-    3. Package the results as a PITA::Report and send it to the
+    3. Package the results as a PITA::XML::Report and send it to the
     PITA::Host::ResultServer.
 
     This functionality is implemented in a module structure that is highly
@@ -66,7 +66,7 @@ AUTHOR
 SEE ALSO
     The Perl Image Testing Architecture (<http://ali.as/pita/>)
 
-    PITA, PITA::Report, PITA::Host::ResultServer
+    PITA, PITA::XML, PITA::Host::ResultServer
 
 COPYRIGHT
     Copyright 2005 Adam Kennedy. All rights reserved.

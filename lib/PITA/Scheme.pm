@@ -36,7 +36,7 @@ PITA::Scheme objects live inside the image and does three main tasks.
 2. Run the sequence of commands to execute the tests and capture
 the results.
 
-3. Package the results as a L<PITA::Report> and send it to the
+3. Package the results as a L<PITA::XML::Report> and send it to the
 L<PITA::Host::ResultServer>.
 
 This functionality is implemented in a module structure that is highly
@@ -71,11 +71,11 @@ use IPC::Run3    ();
 use File::Spec   ();
 use Params::Util ':ALL';
 use Config::Tiny ();
-use PITA::Report ();
+use PITA::XML    ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.09';
+	$VERSION = '0.10';
 }
 
 
@@ -122,9 +122,9 @@ sub new {
 
 	# Build a ::Request object from the config
 	unless ( $self->request ) {
-		$self->{request} = PITA::Report::Request->__from_Config_Tiny($config);
+		$self->{request} = PITA::XML::Request->__from_Config_Tiny($config);
 	}
-	unless ( _INSTANCE($self->request, 'PITA::Report::Request') ) {
+	unless ( _INSTANCE($self->request, 'PITA::XML::Request') ) {
 		Carp::croak("Bad report Request or failed to load one from " . $self->scheme_conf );
 	}
 	unless ( $self->request->scheme eq $self->scheme ) {
@@ -250,13 +250,13 @@ sub prepare_report {
 	return 1 if $self->install;
 
 	# Create the install object
-	$self->{install} = PITA::Report::Install->new(
+	$self->{install} = PITA::XML::Install->new(
 		request  => $self->request,
 		platform => $self->platform,
 		);
 
 	# Create the main report object
-	$self->{report} ||= PITA::Report->new();
+	$self->{report} ||= PITA::XML::Report->new;
 	$self->report->add_install( $self->install );
 
 	1;
@@ -269,21 +269,21 @@ sub execute_command {
 		);
 
 	# Execute the command
-	my $stdout = '';
-	my $stderr = '';
+	my $stdout  = '';
+	my $stderr  = '';
 	my $success = IPC::Run3::run3( $cmd, \undef, \$stdout, \$stderr );
 
 	# Turn the results into a Command object
-	my $command = PITA::Report::Command->new(
+	my $command = PITA::XML::Command->new(
 		cmd    => join( ' ', @$cmd ),
 		stdout => \$stdout,
 		stderr => \$stderr,
 		);
-	unless ( _INSTANCE($command, 'PITA::Report::Command') ) {
+	unless ( _INSTANCE($command, 'PITA::XML::Command') ) {
 		Carp::croak("Error creating ::Command");
 	}
 
-	# If we have a PITA::Report::Install object available,
+	# If we have a PITA::XML::Install object available,
 	# automatically add to it.
 	if ( $self->install ) {
 		$self->install->add_command( $command );
@@ -312,7 +312,7 @@ Adam Kennedy E<lt>cpan@ali.asE<gt>, L<http://ali.as/>
 
 The Perl Image Testing Architecture (L<http://ali.as/pita/>)
 
-L<PITA>, L<PITA::Report>, L<PITA::Host::ResultServer>
+L<PITA>, L<PITA::XML>, L<PITA::Host::ResultServer>
 
 =head1 COPYRIGHT
 

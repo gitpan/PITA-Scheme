@@ -1,5 +1,8 @@
 Revision history for Perl extension PITA::Scheme
 
+0.10  Sat 14 Jan 2006
+	- Converted over to the renamed PITA::XML
+
 0.09  Mon  9 Jan 2006
 	- Ripped out all the HTTP transfer stuff, as it has been moved
 	  over to PITA-Image.
@@ -28,7 +31,7 @@ Revision history for Perl extension PITA::Scheme
 0.03  Mon  2 Jan 2006
 	- Module::Build manual suggests more compatible in more places to
 	  use C<perl Build>/etc than C<./Build>
-	- Incrementing PITA::Report dep
+	- Incrementing PITA::XML dep
 
 0.02  Mon  2 Jan 2006
 	- Completed what should be the first usable version
