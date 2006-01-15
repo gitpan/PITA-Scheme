@@ -22,7 +22,7 @@ BEGIN {
 use Cwd;
 use File::Remove;
 use PITA::Scheme::Perl5::Make ();
-use Test::More tests => 29;
+use Test::More tests => 28;
 
 # Locate the injector directory
 my $injector = catdir( 't', '02_prepare', 'injector' );
@@ -51,7 +51,7 @@ my $scheme = PITA::Scheme::Perl5::Make->new(
 	workarea    => $workarea,
 	scheme      => 'perl5.make',
 	path        => '',
-	scheme_conf => 'scheme.conf',
+	request_xml => 'request.pita',
 	request_id  => 1234,
 	);
 isa_ok( $scheme, 'PITA::Scheme'              );
@@ -60,9 +60,8 @@ isa_ok( $scheme, 'PITA::Scheme::Perl5::Make' );
 # Check the accessors
 is( $scheme->injector, $injector, '->injector matches original'  );
 is( $scheme->workarea, $workarea, '->workarea matches original'  );
-ok( $scheme->scheme_conf, '->scheme_conf returns true'           );
-ok( -f $scheme->scheme_conf, '->scheme_conf file exists'         );
-isa_ok( $scheme->config, 'Config::Tiny'                          );
+ok( $scheme->request_xml, '->request_xml returns true'           );
+ok( -f $scheme->request_xml, '->request_xml file exists'         );
 isa_ok( $scheme->request, 'PITA::XML::Request'                );
 is( $scheme->request_id, 1234, 'Got expected ->request_id value' );
 ok( $scheme->archive, '->archive returns true'                   );

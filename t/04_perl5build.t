@@ -51,7 +51,7 @@ my $scheme = PITA::Scheme::Perl5::Build->new(
 	workarea    => $workarea,
 	scheme      => 'perl5.build',
 	path        => '',
-	scheme_conf => 'scheme.conf',
+	request_xml => 'request.pita',
 	request_id  => 1234,
 	);
 isa_ok( $scheme, 'PITA::Scheme' );
