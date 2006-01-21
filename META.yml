@@ -1,27 +1,27 @@
-abstract: PITA Testing Schemes
-author: 'Adam Kennedy <cpan@ali.as>, L<http://ali.as/>'
-build_requires:
-  Cwd: 0
-  File::Remove: 0.22
-  Module::Build: 0
-  Test::More: 0.47
-distribution_type: module
-generated_by: Module::Install version 0.52
-license: perl
-name: PITA-Scheme
-no_index:
-  directory:
+
+no_index: 
+  directory: 
     - inc
     - t
-requires:
+generated_by: Module::Install version 0.54
+distribution_type: module
+version: 0.12
+name: PITA-Scheme
+author: Adam Kennedy <cpan@ali.as>, L<http://ali.as/>
+license: perl
+build_requires: 
+  File::Remove: 0.22
+  Test::More: 0.47
+  Module::Build: 0
+  Cwd: 0
+requires: 
+  perl: 5.005
+  Params::Util: 0.10
   Archive::Extract: 0.07
-  Carp: 0
-  Config::Tiny: 2.04
   File::Spec: 0.80
   File::Temp: 0
-  File::Which: 0
   IPC::Run3: 0.034
-  PITA::XML: 0.11
-  Params::Util: 0.10
-  perl: 5.005
-version: 0.11
+  File::Which: 0
+  PITA::XML: 0.15
+  Carp: 0
+abstract: PITA Testing Schemes

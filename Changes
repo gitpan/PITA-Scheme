@@ -1,7 +1,11 @@
 Revision history for Perl extension PITA::Scheme
 
+0.12  Sun 22 Jan 2006
+	- Upgrading to properly support the Request ids in PITA-XML 0.15
+
 0.11  Sun 15 Jan 2006
 	- Added a param validation method _DRIVER($scheme)
+	- Added the AUTOMATED_TESTING and PERL_AUTOINSTALL flags
 
 0.10  Sat 14 Jan 2006
 	- Converted over to the renamed PITA::XML

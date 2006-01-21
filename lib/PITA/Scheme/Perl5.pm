@@ -7,6 +7,7 @@ package PITA::Scheme::Perl5;
 # so at the end of this method we will look for the appropriate
 # file and rebless ourself into the class for it.
 
+use 5.005;
 use strict;
 use base 'PITA::Scheme::Perl';
 use File::Spec  ();
@@ -14,7 +15,7 @@ use File::Which ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.11';
+	$VERSION = '0.12';
 }
 
 

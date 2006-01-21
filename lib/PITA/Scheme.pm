@@ -78,7 +78,7 @@ use PITA::XML    ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.11';
+	$VERSION = '0.12';
 }
 
 
@@ -160,8 +160,8 @@ sub request {
 
 sub request_id {
 	my $self = shift;
-	if ( $self->request and $self->request->can('id') ) {
-		# New style request objects
+	if ( $self->request and $self->request->id ) {
+		# New style request with an id
 		return $self->request->id;
 	} else {
 		# Manually passed request_id

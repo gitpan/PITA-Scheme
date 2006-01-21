@@ -2,6 +2,7 @@ package PITA::Scheme::Perl5::Make;
 
 # Class for implementing the perl5-make testing scheme
 
+use 5.005;
 use strict;
 use base 'PITA::Scheme::Perl';
 use Carp        ();
@@ -9,7 +10,7 @@ use File::Which ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.11';
+	$VERSION = '0.12';
 }
 
 

@@ -3,6 +3,7 @@ package PITA::Scheme::Perl;
 # Base class for all schemes working with Perl-like distributions.
 # Provides bits of common functionality.
 
+use 5.005;
 use strict;
 use base 'PITA::Scheme';
 use Carp             ();
@@ -12,7 +13,7 @@ use Archive::Extract ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.11';
+	$VERSION = '0.12';
 }
 
 
@@ -96,6 +97,10 @@ sub prepare_environment {
 		Carp::croak("Failed to change to extract_path for execution");
 	}
 
+	# Set any general environment variables
+	$ENV{PERL_AUTOINSTALL}  = '--defaultdeps';
+	$ENV{AUTOMATED_TESTING} = ref($self);
+
 	# Set any environment variables from the Request
 	### Not supported by PITA::XML::Request yet
 
@@ -105,12 +110,8 @@ sub prepare_environment {
 		Carp::croak("Failed to capture platform information");
 	}
 
-	# Apply private changes to control the testing environment
-	### Not implemented
-
 	1;
 }
-
 
 
 
