@@ -8,12 +8,13 @@ use strict;
 use base 'PITA::Scheme';
 use Carp             ();
 use File::Spec       ();
+use File::pushd      ();
 use Params::Util     '_INSTANCE';
 use Archive::Extract ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.12';
+	$VERSION = '0.13';
 }
 
 
@@ -93,7 +94,7 @@ sub prepare_environment {
 	}
 
 	# Change to the extraction directory
-	unless ( chdir $self->extract_path ) {
+	unless ( $self->{_chdir} = File::pushd::pushd( $self->extract_path ) ) {
 		Carp::croak("Failed to change to extract_path for execution");
 	}
 
@@ -130,6 +131,17 @@ sub workarea_file {
 		? $self->extract_path
 		: $self->workarea;
 	File::Spec->catfile( $workarea, shift );
+}
+
+
+
+
+
+#####################################################################
+# Support Methods
+
+sub DESTROY {
+	undef $_[0]->{_chdir};
 }
 
 1;
