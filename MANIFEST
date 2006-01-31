@@ -12,6 +12,7 @@ inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 lib/PITA/Scheme.pm
 lib/PITA/Scheme/Perl.pm
+lib/PITA/Scheme/Perl/Discovery.pm
 lib/PITA/Scheme/Perl5.pm
 lib/PITA/Scheme/Perl5/Build.pm
 lib/PITA/Scheme/Perl5/Make.pm
@@ -22,10 +23,11 @@ META.yml
 README
 t/01_compile.t
 t/02_prepare.t
-t/02_prepare/injector/PITA-Test-Dummy-Perl5-Make-1.01.tar.gz
-t/02_prepare/injector/request.pita
 t/03_execute.t
 t/04_perl5build.t
-t/04_perl5build/injector/PITA-Test-Dummy-Perl5-Build-1.01.tar.gz
-t/04_perl5build/injector/request.pita
+t/05_perl_discovery.t
 t/99_pod.t
+t/perl5build/injector/PITA-Test-Dummy-Perl5-Build-1.01.tar.gz
+t/perl5build/injector/request.pita
+t/prepare/injector/PITA-Test-Dummy-Perl5-Make-1.01.tar.gz
+t/prepare/injector/request.pita

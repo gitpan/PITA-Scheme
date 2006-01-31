@@ -25,12 +25,12 @@ use PITA::Scheme::Perl5::Make ();
 use Test::More tests => 28;
 
 # Locate the injector directory
-my $injector = catdir( 't', '02_prepare', 'injector' );
+my $injector = catdir( 't', 'prepare', 'injector' );
 ok( -d $injector, 'Test injector exists' );
 
 # Create the workarea directory
 my $cwd      = cwd();
-my $workarea = catdir( 't', '02_prepare', 'workarea' );
+my $workarea = catdir( 't', 'prepare', 'workarea' );
 File::Remove::remove( \1, $workarea ) if -d $workarea;
 END {
 	chdir $cwd;

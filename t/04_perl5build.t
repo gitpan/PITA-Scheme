@@ -25,12 +25,12 @@ use PITA::Scheme::Perl5::Build;
 use Test::More tests => 27;
 
 # Locate the injector directory
-my $injector = catdir( 't', '04_perl5build', 'injector' );
+my $injector = catdir( 't', 'perl5build', 'injector' );
 ok( -d $injector, 'Test injector exists' );
 
 # Create the workarea directory
 my $cwd      = cwd();
-my $workarea = catdir( 't', '04_perl5build', 'workarea' );
+my $workarea = catdir( 't', 'perl5build', 'workarea' );
 File::Remove::remove( \1, $workarea ) if -d $workarea;
 END {
 	chdir $cwd;

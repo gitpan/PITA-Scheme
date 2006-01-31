@@ -1,5 +1,11 @@
 Revision history for Perl extension PITA::Scheme
 
+0.15  Tue 31 Jan 2006
+	- Completing refactoring for the upcoming PITA 0.20 release
+
+0.14  Mon 30 Jan 2006
+	- Adding support for detecting Perl5 platforms
+
 0.13  Mon 23 Jan 2006
 	- Make sure we use File::pushd so we don't end up stuck down
 	  some temp directory.

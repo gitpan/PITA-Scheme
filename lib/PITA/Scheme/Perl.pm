@@ -14,7 +14,7 @@ use Archive::Extract ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.13';
+	$VERSION = '0.15';
 }
 
 
@@ -94,8 +94,10 @@ sub prepare_environment {
 	}
 
 	# Change to the extraction directory
-	unless ( $self->{_chdir} = File::pushd::pushd( $self->extract_path ) ) {
-		Carp::croak("Failed to change to extract_path for execution");
+	unless ( $self->{_chdir} ) {
+		unless ( $self->{_chdir} = File::pushd::pushd( $self->extract_path ) ) {
+			Carp::croak("Failed to change to extract_path for execution");
+		}
 	}
 
 	# Set any general environment variables

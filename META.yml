@@ -3,9 +3,9 @@ no_index:
   directory: 
     - inc
     - t
-generated_by: Module::Install version 0.54
+generated_by: Module::Install version 0.55
 distribution_type: module
-version: 0.13
+version: 0.15
 name: PITA-Scheme
 author: Adam Kennedy <cpan@ali.as>, L<http://ali.as/>
 license: perl
@@ -15,6 +15,7 @@ build_requires:
   Module::Build: 0
   Cwd: 0
 requires: 
+  Process: 0.16
   File::pushd: 0
   File::Spec: 0.80
   File::Which: 0
@@ -24,5 +25,5 @@ requires:
   Archive::Extract: 0.07
   File::Temp: 0
   IPC::Run3: 0.034
-  PITA::XML: 0.16
+  PITA::XML: 0.19
 abstract: PITA Testing Schemes
