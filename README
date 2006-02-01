@@ -13,9 +13,6 @@ SYNOPSIS
   
       # Run the tests
       $scheme->execute_all;
-  
-      # Send the results back to the server
-      $scheme->put_report;
 
 DESCRIPTION
     While most of the PITA system exists outside the guest testing images

@@ -19,9 +19,6 @@ PITA::Scheme - PITA Testing Schemes
   
   # Run the tests
   $scheme->execute_all;
-  
-  # Send the results back to the server
-  $scheme->put_report;
 
 =head1 DESCRIPTION
 
@@ -78,7 +75,7 @@ use PITA::XML    ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.15';
+	$VERSION = '0.20';
 }
 
 

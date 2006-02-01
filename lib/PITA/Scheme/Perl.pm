@@ -14,7 +14,7 @@ use Archive::Extract ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.15';
+	$VERSION = '0.20';
 }
 
 
@@ -143,7 +143,10 @@ sub workarea_file {
 # Support Methods
 
 sub DESTROY {
-	undef $_[0]->{_chdir};
+	# Remove the _chdir explicitly early
+	if ( defined $_[0]->{_chdir} ) {
+		undef $_[0]->{_chdir};
+	}
 }
 
 1;
