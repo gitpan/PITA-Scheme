@@ -14,7 +14,7 @@ use Archive::Extract ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.20';
+	$VERSION = '0.29';
 }
 
 
@@ -30,7 +30,7 @@ sub new {
 	my $self  = $class->SUPER::new(@_);
 
 	# Can we locate the package?
-	my $filename = $self->request->filename;
+	my $filename = $self->request->file->filename;
 	$self->{archive} = File::Spec->catfile( $self->injector, $filename );
 	unless ( -f $self->{archive} ) {
 		Carp::croak('Failed to find package $filename in injector');

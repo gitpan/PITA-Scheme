@@ -1,5 +1,9 @@
 Revision history for Perl extension PITA::Scheme
 
+0.29  Wed 14 Mar 2006
+	- Upgraded to Module::Install 0.60
+	- Upgraded to handle the new XML layout in PITA-XML 0.29
+
 0.20  Thu  2 Feb 2006
 	- Fixed a minor cleanup issue, we need to undef the pushd earlier
 	- Synchronised version with PITA 0.20 release

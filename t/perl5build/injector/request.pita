@@ -2,8 +2,11 @@
 <request xmlns='http://ali.as/xml/schema/pita-xml/0.11'>
     <scheme>perl5.build</scheme>
     <distname>PITA-Test-Dummy-Perl5-Build</distname>
-    <filename>PITA-Test-Dummy-Perl5-Build-1.01.tar.gz</filename>
-    <md5sum>bc91b8d37fa0531b495795439e3edcfd</md5sum>
+    <file>
+    	<filename>PITA-Test-Dummy-Perl5-Build-1.01.tar.gz</filename>
+    	<resource>package</resource>
+    	<md5sum>bc91b8d37fa0531b495795439e3edcfd</md5sum>
+    </file>
     <authority>cpan</authority>
     <authpath>/authors/id/A/AD/ADAMK/PITA-Test-Dummy-Perl5-Build-1.01.tar.gz</authpath>
 </request>

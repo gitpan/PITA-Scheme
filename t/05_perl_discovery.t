@@ -20,7 +20,7 @@ BEGIN {
 }
 
 use PITA::Scheme::Perl::Discovery;
-use Test::More tests => 9;
+use Test::More tests => 11;
 
 sub dies_like {
 	my $code   = shift;
@@ -33,6 +33,8 @@ use Config;
 
 my $request = rel2abs( catfile( 't', 'prepare', 'injector', 'request.pita' ) );
 ok( -f $request, 'Found request.pita' );
+ok( -r $request, 'Confirm request.pita read permissions' );
+ok( ! -x $request, 'Confirm request.pita no-execute permissions' );
 
 
 
