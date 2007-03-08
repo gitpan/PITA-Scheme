@@ -1,28 +1,18 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 # Testing the perl5.build scheme
 
 use strict;
-use lib ();
-use File::Spec::Functions ':ALL';
 BEGIN {
-	$| = 1;
-	unless ( $ENV{HARNESS_ACTIVE} ) {
-		require FindBin;
-		$FindBin::Bin = $FindBin::Bin; # Avoid a warning
-		chdir catdir( $FindBin::Bin, updir() );
-		lib->import(
-			catdir('blib', 'lib'),
-			catdir('blib', 'arch'),
-			'lib',
-			);
-	}
+	$|  = 1;
+	$^W = 1;
 }
 
+use Test::More tests => 27;
 use Cwd;
 use File::Remove;
+use File::Spec::Functions ':ALL';
 use PITA::Scheme::Perl5::Build;
-use Test::More tests => 27;
 
 # Locate the injector directory
 my $injector = catdir( 't', 'perl5build', 'injector' );
@@ -31,10 +21,17 @@ ok( -d $injector, 'Test injector exists' );
 # Create the workarea directory
 my $cwd      = cwd();
 my $workarea = catdir( 't', 'perl5build', 'workarea' );
-File::Remove::remove( \1, $workarea ) if -d $workarea;
+my $readonly = catfile( $workarea, 'PITA-Test-Dummy-Perl5-Build-1.01', 'blib', 'lib', 'PITA', 'Test', 'Dummy', 'Perl5', 'Build.pm' );
+if ( -d $workarea ) {
+	chmod( 0644, $readonly ) if -f $readonly;
+	File::Remove::remove( \1, $workarea );
+}
 END {
 	chdir $cwd;
-	File::Remove::remove( \1, $workarea ) if -d $workarea;
+	if ( -d $workarea ) {
+		chmod( 0644, $readonly ) if -f $readonly;
+		File::Remove::remove( \1, $workarea );
+	}
 }
 ok( mkdir( $workarea ), 'Created workarea' );
 ok( -d $workarea, 'Test workarea exists' );

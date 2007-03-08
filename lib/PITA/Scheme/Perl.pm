@@ -14,7 +14,7 @@ use Archive::Extract ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.29';
+	$VERSION = '0.30';
 }
 
 
@@ -50,10 +50,6 @@ sub extract_path {
 sub extract_files {
 	my $files = $_[0]->{extract_files};
 	$files ? @$files : ();
-}
-
-sub platform {
-	$_[0]->{platform};
 }
 
 
