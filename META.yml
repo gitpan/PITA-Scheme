@@ -1,13 +1,13 @@
 --- 
 abstract: PITA Testing Schemes
-author: Adam Kennedy <cpan@ali.as>, L<http://ali.as/>
+author: Adam Kennedy <adamk@cpan.org>, L<http://ali.as/>
 build_requires: 
   Cwd: 0
   File::Remove: 0.34
   Module::Build: 0.28
   Test::More: 0.47
 distribution_type: module
-generated_by: Module::Install version 0.65
+generated_by: Module::Install version 0.67
 license: perl
 meta-spec: 
   url: http://module-build.sourceforge.net/META-spec-v1.3.html
@@ -18,15 +18,15 @@ no_index:
     - inc
     - t
 requires: 
-  Archive::Extract: 0.16
+  Archive::Extract: 0.18
   Carp: 0
   File::Spec: 0.80
   File::Temp: 0
   File::Which: 0.05
   File::pushd: 0.99
   IPC::Run3: 0.036
-  PITA::XML: 0.30
+  PITA::XML: 0.40
   Params::Util: 0.23
   Process: 0.16
   perl: 5.005
-version: 0.30
+version: 0.40

@@ -75,7 +75,7 @@ use PITA::XML    ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.30';
+	$VERSION = '0.40';
 }
 
 
@@ -316,7 +316,7 @@ For other issues, contact the author.
 
 =head1 AUTHOR
 
-Adam Kennedy E<lt>cpan@ali.asE<gt>, L<http://ali.as/>
+Adam Kennedy E<lt>adamk@cpan.orgE<gt>, L<http://ali.as/>
 
 =head1 SEE ALSO
 
@@ -326,7 +326,7 @@ L<PITA>, L<PITA::XML>, L<PITA::Host::ResultServer>
 
 =head1 COPYRIGHT
 
-Copyright 2005 Adam Kennedy. All rights reserved.
+Copyright 2005 Adam Kennedy.
 
 This program is free software; you can redistribute
 it and/or modify it under the same terms as Perl itself.
