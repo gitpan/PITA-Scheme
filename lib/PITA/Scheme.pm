@@ -61,7 +61,7 @@ TO BE COMPLETED
 
 =cut
 
-use 5.005;
+use 5.006;
 use strict;
 use Carp         ();
 use IPC::Run3    ();
@@ -75,7 +75,7 @@ use PITA::XML    ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.40';
+	$VERSION = '0.41';
 }
 
 
@@ -326,7 +326,7 @@ L<PITA>, L<PITA::XML>, L<PITA::Host::ResultServer>
 
 =head1 COPYRIGHT
 
-Copyright 2005 Adam Kennedy.
+Copyright 2005 - 2008 Adam Kennedy.
 
 This program is free software; you can redistribute
 it and/or modify it under the same terms as Perl itself.
