@@ -4,11 +4,14 @@ author:
   - 'Adam Kennedy <adamk@cpan.org>, L<http://ali.as/>'
 build_requires:
   Cwd: 0
-  File::Remove: 0.34
+  ExtUtils::MakeMaker: 6.42
+  File::Remove: 1.42
   Module::Build: 0.28
   Test::More: 0.47
+configure_requires:
+  ExtUtils::MakeMaker: 6.42
 distribution_type: module
-generated_by: 'Module::Install version 0.77'
+generated_by: 'Module::Install version 0.91'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -21,6 +24,7 @@ no_index:
     - t
 requires:
   Archive::Extract: 0.18
+  Data::GUID: 0.045
   File::Spec: 0.80
   File::Temp: 0
   File::Which: 0.05
@@ -31,5 +35,7 @@ requires:
   Process: 0.16
   perl: 5.6.0
 resources:
+  ChangeLog: http://fisheye2.atlassian.com/changelog/cpan/trunk/PITA-Scheme
   license: http://dev.perl.org/licenses/
-version: 0.41
+  repository: http://svn.ali.as/cpan/trunk/PITA-Scheme
+version: 0.42
