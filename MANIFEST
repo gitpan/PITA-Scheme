@@ -24,12 +24,12 @@ t/02_prepare.t
 t/03_execute.t
 t/04_perl5build.t
 t/05_perl_discovery.t
-t/97_meta.t
-t/98_pod.t
-t/99_pmv.t
 t/execute/injector/PITA-Test-Dummy-Perl5-Make-1.01.tar.gz
 t/execute/injector/request.pita
 t/perl5build/injector/PITA-Test-Dummy-Perl5-Build-1.01.tar.gz
 t/perl5build/injector/request.pita
 t/prepare/injector/PITA-Test-Dummy-Perl5-Make-1.01.tar.gz
 t/prepare/injector/request.pita
+xt/meta.t
+xt/pmv.t
+xt/pod.t

@@ -1,4 +1,4 @@
-use inc::Module::Install::DSL 0.91;
+use inc::Module::Install::DSL 1.00;
 
 all_from      lib/PITA/Scheme.pm
 requires      File::Temp       0
@@ -10,7 +10,7 @@ requires      Data::GUID       0.045
 requires      Params::Util     0.23
 requires      Archive::Extract 0.18
 requires      Process          0.16
-requires      PITA::XML        0.40
+requires      PITA::XML        0.43
 test_requires Module::Build    0.28
 test_requires Cwd              0
 test_requires Test::More       0.47
